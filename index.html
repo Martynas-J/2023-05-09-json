@@ -5,14 +5,37 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>json</title>
+    <title>API</title>
 
 </head>
 
 <body>
     <div class="movies-lists">
     </div>
+    <div><p id="joke">
+    </p></div>
+    <form id="joke-form">
+        <label for="category"> Select a category: </label>
+        <select name="category" id="category">
+        </select>
+        <input id="submit" type="submit" value="Loading" disabled>
+    </form>
+    <form id="joke-by-text-form">
+        <label for="text"> Write text: </label>
+        <input type="text" name="text" id="text">
+        <label for="category-by-text"> Select a category: </label>
+        <select name="category-by-text" id="category-by-text">
+        </select>
+        <input id="submit-text" type="submit" value="Loading" disabled>
+    </form>
     <script src="script.js"></script>
 </body>
 
 </html>
+<!-- 2. Sukurti galimybę pasirinkti juokelių kategoriją:
+  2.1. Sukurti formą, kurioje bus <select> elementas. 
+  2.2. <select> elementas savyje turės <option> elementus. Juose galima pasirinkti juokelių kategoriją. Šie elementai turi susigeneruoti automatiškai, priklausomai nuo to, kokias kategorijas turi API.
+
+ 
+
+  2.3. Sukurti mygtuką, kurį paspaudus, sugeneruotų atsitiktinį juokelį pagal pasirinktą kategoriją. -->
