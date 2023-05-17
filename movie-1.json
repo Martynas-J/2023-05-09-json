@@ -1,0 +1,20 @@
+{
+    "name": "The Shawshank Redemption",
+    "ratings": {
+        "evaluation": 9.3,
+        "votes": 2700000
+    },
+    "year": 1994,
+    "description": "Over the course of several years, two convicts form a friendship, seeking consolation and, eventually, redemption through basic compassion.",
+    "genres": [
+        "Drama"
+    ],
+    "director": [
+        "Frank Darabont"
+    ],
+    "stars": [
+        "Tim Robbins",
+        "Morgan Freeman",
+        "Bob Gunton"
+    ]
+}

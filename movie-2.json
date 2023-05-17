@@ -1,0 +1,21 @@
+{
+    "name": "The Godfather",
+    "ratings": {
+        "evaluation": 9.2,
+        "votes": 1900000
+    },
+    "year": 1972,
+    "description": "Don Vito Corleone, head of a mafia family, decides to hand over his empire to his youngest son Michael. However, his decision unintentionally puts the lives of his loved ones in grave danger.",
+    "genres": [
+        "Crime",
+        "Drama"
+    ],
+    "director": [
+        "Francis Ford Coppola"
+    ],
+    "stars": [
+        "Marlon Brando",
+        "Al Pacino",
+        "James Caan"
+    ]
+}
