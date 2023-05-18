@@ -1,5 +1,4 @@
 let dogsList = document.querySelector(".dogs")
-let randomDogButton = document.querySelector(".random-dog")
 let selectBreeds = document.querySelector("#choose-breeds")
 let breedsForm = document.querySelector("#dog-by-breeds")
 let getDogButton = document.querySelector("#get-dog")
@@ -11,6 +10,10 @@ let option = document.createElement("option")
 let subBreedText = document.createElement("label")
 subBreedText.textContent = "Choose Sub breeds: "
 let img = document.createElement("img")
+
+option.value = "random"
+option.textContent = "Random"
+selectBreeds.append(option)
 
 function getAPI(link) {
     fetch(link)
@@ -24,26 +27,14 @@ function getAPI(link) {
     getDogButton.removeAttribute("disabled")
 }
 
-randomDogButton.addEventListener("click", () => {
-    fetch("https://dog.ceo/api/breeds/image/random")
-        .then(response => response.json())
-        .then(data => {
-            removeImg()
-            img.src = data.message
-            img.style.maxWidth = "300px"
-            dogPictures.append(img)
-        })
-        .catch(error => {
-            console.error('Not found:', error);
-        });
-})
-
 breedsForm.addEventListener("submit", (event) => {
     event.preventDefault();
     form = event.target
     let breed = form["choose-breeds"].value
     let quantity = form["quantity-dogs"].value
-    if (form["choose-sub-breeds"]) {
+    if (breed === "random") {
+        getAPI(`https://dog.ceo/api/breeds/image/random/${quantity}`)
+    } else if (form["choose-sub-breeds"]) {
         let subBreed = form["choose-sub-breeds"].value
         getAPI(`https://dog.ceo/api/breed/${breed}/${subBreed}/images/random/${quantity}`)
     } else {
@@ -52,25 +43,30 @@ breedsForm.addEventListener("submit", (event) => {
 })
 breedsForm["choose-breeds"].addEventListener("input", () => {
     let breeds = breedsForm["choose-breeds"].value
-    fetch(`https://dog.ceo/api/breed/${breeds}/list`)
-        .then(response => response.json())
-        .then(data => {
-            while (selectSubBreeds.options.length > 0) {
-                selectSubBreeds.remove(0);
-            }
-            subBreedText.remove()
-            selectSubBreeds.remove()
-            if (data.message.length > 0) {
-                selectBreeds.after(subBreedText, selectSubBreeds)
-            }
-            Object.values(data.message).forEach(item => {
-                let option = document.createElement("option")
-                option.value = item
-                option.textContent = item
-                selectSubBreeds.append(option)
+    if (breeds !== "random") {
+        fetch(`https://dog.ceo/api/breed/${breeds}/list`)
+            .then(response => response.json())
+            .then(data => {
+                while (selectSubBreeds.options.length > 0) {
+                    selectSubBreeds.remove(0);
+                }
+                subBreedText.remove()
+                selectSubBreeds.remove()
+                if (data.message.length > 0) {
+                    selectBreeds.after(subBreedText, selectSubBreeds)
+                }
+                Object.values(data.message).forEach(item => {
+                    let option = document.createElement("option")
+                    option.value = item
+                    option.textContent = item
+                    selectSubBreeds.append(option)
 
-            });
-        })
+                });
+            })
+    } else {
+        subBreedText.remove()
+        selectSubBreeds.remove()
+    }
 })
 
 getDogBreeds("https://dog.ceo/api/breeds/list/all")
