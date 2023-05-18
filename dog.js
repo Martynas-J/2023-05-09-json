@@ -3,6 +3,7 @@ let randomDogButton = document.querySelector(".random-dog")
 let selectBreeds = document.querySelector("#choose-breeds")
 let breedsForm = document.querySelector("#dog-by-breeds")
 let getDogButton = document.querySelector("#get-dog")
+let dogPictures = document.querySelector(".dog-pictures")
 
 let selectSubBreeds = document.createElement("select")
 selectSubBreeds.id = "choose-sub-breeds"
@@ -10,7 +11,6 @@ let option = document.createElement("option")
 let subBreedText = document.createElement("label")
 subBreedText.textContent = "Choose Sub breeds: "
 let img = document.createElement("img")
-randomDogButton.before(img)
 
 function getAPI(link) {
     fetch(link)
@@ -25,19 +25,29 @@ function getAPI(link) {
 }
 
 randomDogButton.addEventListener("click", () => {
-    getAPI("https://dog.ceo/api/breeds/image/random")
+    fetch("https://dog.ceo/api/breeds/image/random")
+        .then(response => response.json())
+        .then(data => {
+            removeImg()
+            img.src = data.message
+            img.style.maxWidth = "300px"
+            dogPictures.append(img)
+        })
+        .catch(error => {
+            console.error('Not found:', error);
+        });
 })
-getAPI("https://dog.ceo/api/breeds/list/all")
 
 breedsForm.addEventListener("submit", (event) => {
     event.preventDefault();
     form = event.target
     let breed = form["choose-breeds"].value
+    let quantity = form["quantity-dogs"].value
     if (form["choose-sub-breeds"]) {
         let subBreed = form["choose-sub-breeds"].value
-        getAPI(`https://dog.ceo/api/breed/${breed}/${subBreed}/images/random`)
+        getAPI(`https://dog.ceo/api/breed/${breed}/${subBreed}/images/random/${quantity}`)
     } else {
-        getAPI(`https://dog.ceo/api/breed/${breed}/images/random`)
+        getAPI(`https://dog.ceo/api/breed/${breed}/images/random/${quantity}`)
     }
 })
 breedsForm["choose-breeds"].addEventListener("input", () => {
@@ -63,28 +73,35 @@ breedsForm["choose-breeds"].addEventListener("input", () => {
         })
 })
 
-// let arr = []
-// let subBreedList
-
-function output(data) {
-    if (typeof data.message !== "object") {
-        img.src = data.message
-        img.style.maxWidth = "300px"
-    } else {
-        Object.keys(data.message).forEach(item => {
-            let option = document.createElement("option")
-            option.value = item
-            option.textContent = item
-            selectBreeds.append(option)
-
+getDogBreeds("https://dog.ceo/api/breeds/list/all")
+function getDogBreeds(link) {
+    fetch(link)
+        .then(response => response.json())
+        .then(data => {
+            Object.keys(data.message).forEach(item => {
+                let option = document.createElement("option")
+                option.value = item
+                option.textContent = item
+                selectBreeds.append(option)
+            });
+        })
+        .catch(error => {
+            console.error('Not found:', error);
         });
-        // Object.values(data.message).forEach(item => {
-        //     Object.values(item).forEach(item => {
-        //         arr.push(item)
-        //         subBreedList = arr.filter((elem, index) => arr.indexOf(elem) === index);
-
-        //     });
-        // });
-        // console.log(subBreedList)
+    getDogButton.removeAttribute("disabled")
+}
+function output(data) {
+    removeImg()
+    data.message.map(item => {
+        let img = document.createElement("img")
+        dogPictures.append(img)
+        img.src = item
+        img.style.maxWidth = "300px"
+    })
+}
+function removeImg() {
+    let images = dogPictures.getElementsByTagName('img');
+    for (let i = images.length - 1; i >= 0; i--) {
+        images[i].remove();
     }
 }
