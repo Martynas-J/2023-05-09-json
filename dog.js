@@ -92,7 +92,7 @@ function output(data) {
         let img = document.createElement("img")
         dogPictures.append(img)
         img.src = item
-        img.style.maxWidth = "300px"
+        img.style.maxHeight = "300px"
     })
 }
 function removeImg() {
