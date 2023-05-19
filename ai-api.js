@@ -23,10 +23,19 @@ personData.append(titleCounty, allTitle, allUl)
 allUl.append(ulNational, ulGender, ulAge)
 allTitle.append(titleNational, titleGender, titleAge)
 
+let personName
+let personNameProbability
+let personCountry_id
+let personGender
+let personGenderProbability
+let personGenderCount
+let personAge
+
 personDataForm.addEventListener("submit", (event) => {
     event.preventDefault()
     let form = event.target
     let name = form.name.value
+    personName = name
     nationalApi(name)
     genderApi(name)
     ageApi(name)
@@ -38,8 +47,9 @@ function nationalApi(name) {
     fetch(`https://api.nationalize.io/?name=${name}`)
         .then(response => response.json())
         .then(data => {
+            personNameProbability = data.country[0].probability
+            personCountry_id = data.country[0].country_id
             data.country.forEach(element => {
-
                 let liCountyId = document.createElement("li")
                 let liCountyProbability = document.createElement("li")
                 titleNational.textContent = "By National:"
@@ -47,7 +57,9 @@ function nationalApi(name) {
                 liCountyProbability.innerHTML = `<b>Probability: </b>${element.probability} %`
                 ulNational.append(liCountyId, liCountyProbability)
             });
+            outputPersonNameInfo()
         })
+        
 }
 
 function genderApi(name) {
@@ -55,7 +67,9 @@ function genderApi(name) {
     fetch(`https://api.genderize.io?name=${name}`)
         .then(response => response.json())
         .then(data => {
-            console.log(data)
+            personGender = data.gender
+            personGenderProbability = data.probability
+            personGenderCount = data.count
             let liCount = document.createElement("li")
             let liGender = document.createElement("li")
             let liProbability = document.createElement("li")
@@ -71,6 +85,7 @@ function ageApi(name) {
     fetch(`https://api.agify.io/?name=${name}`)
         .then(response => response.json())
         .then(data => {
+            personAge = data.age
             let liCount = document.createElement("li")
             let liAge = document.createElement("li")
             titleAge.textContent = "By Age:"
@@ -78,4 +93,10 @@ function ageApi(name) {
             liAge.innerHTML = `<b>Age: </b>${data.age}`
             ulAge.append(liAge, liCount)
         })
+}
+let outputText = document.createElement("p")
+function outputPersonNameInfo() {
+    outputText.innerHTML = `Name ${personName} by nationality (highest percentage ${personNameProbability} %) is from  country ${personCountry_id}. ${personName} according to gender is ${personGender} (${personGenderProbability}%). We count ${personGenderCount} ${personGender} ${personName}. ${personName} average by age is ${personAge} year` 
+
+    personDataForm.before(outputText)
 }
